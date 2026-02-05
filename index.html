@@ -14,6 +14,25 @@
       </header>
 
       <div class="controls">
+        <div class="date-selector">
+          <button
+            id="prevDayBtn"
+            class="date-nav-btn"
+            aria-label="Previous day"
+          >
+            ←
+          </button>
+          <input
+            type="date"
+            id="dateInput"
+            class="date-input"
+            aria-label="Select date"
+          />
+          <span id="selectedDate" class="selected-date-display"></span>
+          <button id="nextDayBtn" class="date-nav-btn" aria-label="Next day">
+            →
+          </button>
+        </div>
         <div class="meal-selector">
           <button class="meal-btn" data-meal="Breakfast">
             <span class="meal-icon">🌅</span>
@@ -38,6 +57,14 @@
       <div class="meal-display">
         <div class="main-dishes">
           <h2>Featured Dishes</h2>
+          <div
+            class="loading-spinner"
+            id="loadingSpinner"
+            style="display: none"
+          >
+            <div class="spinner-animation"></div>
+            <p id="loadingMessage">Loading delicious menu...</p>
+          </div>
           <div class="featured-grid" id="featuredDishes">
             <!-- Main dishes with icons will be populated here -->
           </div>

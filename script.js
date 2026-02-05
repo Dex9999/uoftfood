@@ -2,7 +2,9 @@
 let menuData = null;
 let currentMeal = "Dinner";
 let currentResidence = null;
+let currentDate = null; // Track selected date (YYYY-MM-DD)
 let userSelectedMeal = null; // Track user's explicit meal choice
+let loadingMessageInterval = null; // Track loading message interval
 const DEFAULT_RESIDENCE = "Chestnut Residence";
 
 // Valid residence names (exact display names used by API)
@@ -57,6 +59,192 @@ function getResidenceFromURL() {
     } catch (err) {
         console.error('Error parsing residence from URL', err);
         return DEFAULT_RESIDENCE;
+    }
+}
+
+// Get date from URL parameter, fallback to today
+function getDateFromURL() {
+    try {
+        const params = new URLSearchParams(window.location.search);
+        const dateStr = params.get('date');
+        if (dateStr && /^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
+            return dateStr;
+        }
+        return getTodayString();
+    } catch (err) {
+        console.error('Error parsing date from URL', err);
+        return getTodayString();
+    }
+}
+
+// Format today's date as YYYY-MM-DD
+function getTodayString() {
+    const today = new Date();
+    return today.toISOString().split('T')[0];
+}
+
+// Format date object as YYYY-MM-DD
+function formatDate(date) {
+    return date.toISOString().split('T')[0];
+}
+
+// Add or update date parameter in URL
+function updateURLWithDate(date) {
+    const params = new URLSearchParams(window.location.search);
+    params.set('date', date);
+    history.replaceState({}, '', `?${params.toString()}`);
+}
+
+// Update date selector UI
+function updateDateSelectorUI() {
+    const dateInput = document.getElementById('dateInput');
+    const selectedDisplay = document.getElementById('selectedDate');
+
+    if (dateInput) {
+        dateInput.value = currentDate;
+    }
+
+    if (selectedDisplay) {
+        const dateObj = new Date(currentDate + 'T00:00:00');
+        const options = { weekday: 'short', month: 'short', day: 'numeric' };
+        selectedDisplay.textContent = dateObj.toLocaleDateString('en-US', options);
+    }
+}
+
+// Set up date navigation
+function setupDateNavigation() {
+    const prevBtn = document.getElementById('prevDayBtn');
+    const nextBtn = document.getElementById('nextDayBtn');
+    const dateInput = document.getElementById('dateInput');
+
+    if (prevBtn) {
+        prevBtn.addEventListener('click', () => {
+            const date = new Date(currentDate + 'T00:00:00');
+            date.setDate(date.getDate() - 1);
+            setDate(formatDate(date));
+        });
+    }
+
+    if (nextBtn) {
+        nextBtn.addEventListener('click', () => {
+            const date = new Date(currentDate + 'T00:00:00');
+            date.setDate(date.getDate() + 1);
+            setDate(formatDate(date));
+        });
+    }
+
+    if (dateInput) {
+        dateInput.addEventListener('change', (e) => {
+            setDate(e.target.value);
+        });
+    }
+}
+
+// Change date and update UI/URL
+function setDate(newDate) {
+    currentDate = newDate;
+    updateURLWithDate(currentDate);
+    updateDateSelectorUI();
+    fetchMenuForDate(currentDate);
+}
+
+// Loading messages that appear over time
+const LOADING_MESSAGES = [
+    "Loading delicious menu...",
+    "This is taking a while huh",
+    "Hey don't shoot the messenger",
+    "Myb twin, i'm trying my best",
+    "You should probably just reload the tab",
+    "Oh you're still here",
+    "Atp it's not gonna work bro"
+];
+
+// Start cycling through loading messages
+function startLoadingMessages() {
+    let messageIndex = 0;
+    const messageElement = document.getElementById('loadingMessage');
+
+    // Clear any existing interval
+    if (loadingMessageInterval) {
+        clearInterval(loadingMessageInterval);
+    }
+
+    // Set initial message
+    if (messageElement) {
+        messageElement.textContent = LOADING_MESSAGES[0];
+    }
+
+    // Change message every 2 seconds
+    loadingMessageInterval = setInterval(() => {
+        messageIndex++;
+        if (messageIndex < LOADING_MESSAGES.length) {
+            if (messageElement) {
+                messageElement.textContent = LOADING_MESSAGES[messageIndex];
+            }
+        } else {
+            // Keep showing the last message
+            clearInterval(loadingMessageInterval);
+        }
+    }, 2000);
+}
+
+// Stop cycling through loading messages
+function stopLoadingMessages() {
+    if (loadingMessageInterval) {
+        clearInterval(loadingMessageInterval);
+        loadingMessageInterval = null;
+    }
+}
+
+// Fetch menu data for a specific date
+async function fetchMenuForDate(date) {
+    try {
+        console.log("📡 Fetching menu for date:", date);
+
+        // Show loading spinner and start cycling messages
+        const spinner = document.getElementById('loadingSpinner');
+        if (spinner) {
+            spinner.style.display = 'flex';
+        }
+        document.getElementById('featuredDishes').innerHTML = '';
+        document.getElementById('allStations').innerHTML = '';
+        startLoadingMessages();
+
+        const url = `https://uoft-menu-api.vercel.app/api/menu?date=${encodeURIComponent(date)}`;
+        const response = await fetch(url);
+        console.log("📡 Response status:", response.status);
+
+        const data = await response.json();
+        console.log("📊 Data received:", data);
+
+        // Hide loading spinner and stop cycling messages
+        stopLoadingMessages();
+        if (spinner) {
+            spinner.style.display = 'none';
+        }
+
+        // Check if response is not successful (e.g., 503 - menu not available)
+        if (!response.ok) {
+            console.log("❌ API returned error status:", response.status);
+            const errorMessage = data.message || data.error || "Unable to load menu for this date.";
+            document.getElementById("featuredDishes").innerHTML = `<p class='empty-state'>⏳ ${errorMessage}</p>`;
+            document.getElementById("allStations").innerHTML = "";
+            return;
+        }
+
+        // Successfully got valid menu data
+        menuData = data;
+        console.log("✅ Menu data fetched for date:", date);
+        renderMenu();
+    } catch (error) {
+        console.error('❌ Error fetching menu for date:', error);
+        stopLoadingMessages();
+        const spinner = document.getElementById('loadingSpinner');
+        if (spinner) {
+            spinner.style.display = 'none';
+        }
+        document.getElementById("featuredDishes").innerHTML = "<p class='empty-state'>⚠️ Error loading menu. Please try again.</p>";
+        document.getElementById("allStations").innerHTML = "";
     }
 }
 
@@ -189,8 +377,12 @@ function guessEmoji(dishName) {
         { pattern: /ramen|noodle/, emoji: '🍜' },
         { pattern: /cheese/, emoji: '🧀' },
         { pattern: /poke|sushi|sashimi/, emoji: '🍣' },
+        { pattern: /tempura|shrimp/, emoji: '🍤' },
+        { pattern: /katsu|tonkatsu/, emoji: '🍱' },
         { pattern: /burger|patty/, emoji: '🍔' },
-        { pattern: /chicken|poultry|pork/, emoji: '🍗' },
+        { pattern: /chicken|poultry/, emoji: '🍗' },
+        { pattern: /pork/, emoji: '🍖' },
+        { pattern: /shawarma|burrito/, emoji: '🌯' },
         { pattern: /fish|salmon|tuna|seafood/, emoji: '🐟' },
         { pattern: /shrimp|prawn/, emoji: '🦐' },
         { pattern: /tofu|vegetarian|vegan/, emoji: '🥬' },
@@ -214,6 +406,7 @@ function guessEmoji(dishName) {
         { pattern: /fish|cod|salmon|haddock/, emoji: '🐟' },
         { pattern: /egg|omelette/, emoji: '🍳' },
         { pattern: /bacon|sausage/, emoji: '🥓' },
+        { pattern: /bibimbap/, emoji: '🍛' }
 
     ];
 
@@ -243,9 +436,14 @@ document.addEventListener("DOMContentLoaded", () => {
 async function initializePage() {
     console.log("🚀 initializePage started");
     try {
+        // Get date from URL or use today
+        currentDate = getDateFromURL();
+        console.log("📅 Current date set to:", currentDate);
+
         // Fetch menu data from API
-        console.log("📡 Fetching from https://uoft-menu-api.vercel.app/api/menu");
-        const response = await fetch('https://uoft-menu-api.vercel.app/api/menu');
+        console.log("📡 Fetching from https://uoft-menu-api.vercel.app/api/menu?date=" + currentDate);
+        const url = `https://uoft-menu-api.vercel.app/api/menu?date=${encodeURIComponent(currentDate)}`;
+        const response = await fetch(url);
         console.log("📡 Response status:", response.status);
         menuData = await response.json();
         console.log("✅ Menu data fetched successfully");
@@ -268,6 +466,10 @@ async function initializePage() {
         // update header to reflect residence
         const header = document.querySelector('header h1');
         if (header) header.textContent = `🍽️ ${currentResidence} Dining Menu`;
+
+        // Initialize date selector UI
+        updateDateSelectorUI();
+        setupDateNavigation();
 
         // Render residence links
         renderResidenceLinks();

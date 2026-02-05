@@ -41,6 +41,60 @@ header h1 {
     padding: 30px;
     background: #f8f9fa;
     border-bottom: 1px solid #e9ecef;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.date-selector {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.date-nav-btn {
+    padding: 10px 15px;
+    border: 2px solid #dee2e6;
+    background: white;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #667eea;
+    transition: all 0.3s ease;
+}
+
+.date-nav-btn:hover {
+    border-color: #667eea;
+    background: #f0f4ff;
+    transform: scale(1.1);
+}
+
+.date-input {
+    padding: 10px 12px;
+    border: 2px solid #dee2e6;
+    border-radius: 8px;
+    font-size: 1em;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.date-input:hover,
+.date-input:focus {
+    border-color: #667eea;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.selected-date-display {
+    font-size: 0.9em;
+    color: #667eea;
+    font-weight: 600;
+    min-width: 100px;
+    text-align: center;
 }
 
 .meal-selector {
@@ -98,6 +152,76 @@ header h1 {
     margin-bottom: 25px;
     border-bottom: 3px solid #667eea;
     padding-bottom: 10px;
+}
+
+.loading-spinner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px;
+    gap: 20px;
+}
+
+.spinner-animation {
+    width: 80px;
+    height: 80px;
+    position: relative;
+    font-size: 60px;
+    line-height: 80px;
+    text-align: center;
+}
+
+.spinner-animation::before {
+    content: '🍽️';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: spin 2s linear infinite;
+}
+
+.spinner-animation::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: translate(-50%, -50%) scale(1);
+    }
+    50% {
+        transform: translate(-50%, -60%) scale(1.1);
+    }
+}
+
+.loading-spinner p {
+    font-size: 1em;
+    color: #667eea;
+    font-weight: 600;
+    animation: fade 1.5s ease-in-out infinite;
+}
+
+@keyframes fade {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
 }
 
 .featured-grid {
