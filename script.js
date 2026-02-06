@@ -384,14 +384,14 @@ function guessEmoji(dishName) {
         { pattern: /chicken|poultry/, emoji: '🍗' },
         { pattern: /pork/, emoji: '🍖' },
         { pattern: /shawarma|burrito/, emoji: '🌯' },
-        { pattern: /fish|salmon|tuna|seafood/, emoji: '🐟' },
+        { pattern: /fish|salmon|tuna|seafood|fillet/, emoji: '🐟' },
         { pattern: /shrimp|prawn/, emoji: '🦐' },
         { pattern: /tofu|vegetarian|vegan/, emoji: '🥬' },
         { pattern: /steak|rib/, emoji: '🥩' },
         { pattern: /pizza|pie/, emoji: '🍕' },
         { pattern: /sandwich|sub/, emoji: '🥪' },
         { pattern: /taco|burrito|wrap/, emoji: '🌮' },
-        { pattern: /pasta|lasagna|avioli/, emoji: '🍝' },
+        { pattern: /pasta|lasagna|avioli|gnocchi/, emoji: '🍝' },
         { pattern: /pita|naan|tortilla/, emoji: '🫓' },
         { pattern: /rice|grain/, emoji: '🍚' },
         { pattern: /salad|greens/, emoji: '🥗' },
@@ -407,7 +407,8 @@ function guessEmoji(dishName) {
         { pattern: /fish|cod|salmon|haddock/, emoji: '🐟' },
         { pattern: /egg|omelette/, emoji: '🍳' },
         { pattern: /bacon|sausage/, emoji: '🥓' },
-        { pattern: /bibimbap/, emoji: '🍛' }
+        { pattern: /bibimbap|fijoles/, emoji: '🍛' },
+        { pattern: /meatballs/, emoji: '🥩' }
 
     ];
 
