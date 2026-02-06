@@ -156,7 +156,8 @@ const LOADING_MESSAGES = [
     "Myb twin, i'm trying my best",
     "You should probably just reload the tab",
     "Oh you're still here",
-    "Atp it's not gonna work bro"
+    "Atp it's not gonna work bro",
+    "Maybe you should be doing your homework",
 ];
 
 // Start cycling through loading messages
