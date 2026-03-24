@@ -867,7 +867,6 @@ function renderMenu() {
     console.log("🌟 Featured dishes:", featured);
     renderFeaturedDishes(featured);
     renderStations(mealData);
-    renderResidenceHours();
     console.log("✅ renderMenu() completed");
 }
 // Get all items across all stations
@@ -985,7 +984,6 @@ function renderStations(mealData) {
             <div class="item ${idx >= 4 ? 'hidden-item' : ''}" tabindex="0">
                 <div class="item-name">${item.name}</div>
                 ${item.uom ? `<div class="item-uom">${item.uom}</div>` : ""}
-                <div class="item-time">${stationTime}</div>
                 ${hasNutritionData(item) ? `<span class="nutrition-badge">📊 ${item.nutrition[0]} cal</span>` : ""}
                 ${hasNutritionData(item) ? `<div class="nutrition-panel">${renderNutrition(item)}</div>` : ""}
             </div>

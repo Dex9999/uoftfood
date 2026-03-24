@@ -455,6 +455,18 @@ header h1 {
     color: #9ca3af;
 }
 
+.station-header .station-time {
+    float: right;
+    font-size: 0.85em;
+    font-weight: 600;
+    color: #1e293b;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 4px 10px;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
 .hours-list {
     display: grid;
     gap: 8px;
