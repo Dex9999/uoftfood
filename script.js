@@ -562,35 +562,43 @@ function renderResidenceHours() {
         return;
     }
 
-    const DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    const dateObj = new Date(`${currentDate}T00:00:00`);
+    const currentDayName = days[dateObj.getDay()];
+    const dayIndex = dateObj.getDay();
 
-    const generalRow = DAYS.map(day => `<td>${residenceHours.general[day] || '—'}</td>`).join('');
+    const generalToday = residenceHours.general[currentDayName] || 'Closed';
 
-    const stationRows = Object.entries(residenceHours.stationHours).map(([station, values]) => {
-        const cells = DAYS.map((day, i) => `<td>${values[i] || 'Closed'}</td>`).join('');
-        return `<tr><th>${station}</th>${cells}</tr>`;
-    }).join('');
+    const mealStationMap = {
+        'Breakfast': ['Breakfast', 'Brunch', 'Salad / Deli', 'Coffee & Drinks'],
+        'Lunch': ['Lunch', 'Entrée AM', 'Salad / Deli', 'Soup', 'Pizza', 'Grill', 'Coffee & Drinks'],
+        'Dinner': ['Dinner', 'Entrée PM', 'Foodie Finds', 'Pan Station PM', 'Grill PM', 'Grill', 'Coffee & Drinks', 'Dessert']
+    };
+
+    const selectedStations = mealStationMap[currentMeal] || [];
+
+    const stationRows = selectedStations
+        .map(station => {
+            const hours = residenceHours.stationHours[station];
+            if (!hours) return null;
+            const time = hours[dayIndex] || 'Closed';
+            if (!time || time.toLowerCase() === 'closed') return null;
+            return `<div class="hour-row"><div class="hour-name">${station}</div><div class="hour-value">${time}</div></div>`;
+        })
+        .filter(Boolean)
+        .join('');
+
+    const displayedMeal = currentMeal || 'Today';
 
     container.innerHTML = `
-        <h3>Operating Hours for ${residenceHours.placeName}</h3>
-        <span class="hours-subtitle">General building hours and station-level hours (Sunday→Saturday)</span>
-        <table class="hours-table">
-            <thead>
-                <tr><th>General</th>${DAYS.map(d => `<th>${d.slice(0, 3)}</th>`).join('')}</tr>
-            </thead>
-            <tbody>
-                <tr><th>Open</th>${generalRow}</tr>
-            </tbody>
-        </table>
-        <div style="margin-top:12px; overflow-x:auto">
-            <table class="station-hours-table">
-                <thead>
-                    <tr><th>Station</th>${DAYS.map(d => `<th>${d.slice(0, 3)}</th>`).join('')}</tr>
-                </thead>
-                <tbody>
-                    ${stationRows}
-                </tbody>
-            </table>
+        <h3>${residenceHours.placeName} Hours</h3>
+        <span class="hours-subtitle">${currentDayName}, ${currentDate}. Showing ${displayedMeal} relevant hours.</span>
+        <div class="hours-summary">
+            <div class="hours-chip">General: ${generalToday}</div>
+            <div class="hours-chip">Meal: ${currentMeal}</div>
+        </div>
+        <div class="hours-list">
+            ${stationRows || '<div class="hour-row"><div class="hour-name">No meal station hours available today.</div></div>'}
         </div>
     `;
 }

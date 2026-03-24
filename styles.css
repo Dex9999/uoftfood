@@ -387,9 +387,57 @@ header h1 {
 }
 
 .hours-panel h3 {
-    font-size: 1.1em;
+    font-size: 1.2em;
     margin-bottom: 8px;
     color: #333;
+}
+
+.hours-panel .hours-subtitle {
+    color: #6b7280;
+    font-size: 0.85em;
+    margin-bottom: 12px;
+    display: inline-block;
+}
+
+.hours-summary {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-bottom: 12px;
+}
+
+.hours-chip {
+    background: #eef2ff;
+    color: #3730a3;
+    border-radius: 999px;
+    padding: 6px 10px;
+    font-weight: 600;
+    font-size: 0.83em;
+}
+
+.hours-list {
+    display: grid;
+    gap: 8px;
+}
+
+.hours-list .hour-row {
+    display: flex;
+    justify-content: space-between;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 8px 10px;
+    background: #f8fafc;
+}
+
+.hour-name {
+    font-weight: 600;
+    flex: 1;
+}
+
+.hour-value {
+    min-width: 120px;
+    text-align: right;
+    color: #334155;
 }
 
 .hours-panel .hours-subtitle {
