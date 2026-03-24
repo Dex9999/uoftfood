@@ -603,6 +603,80 @@ function renderResidenceHours() {
     `;
 }
 
+function getDayIndexForDate(date) {
+    return new Date(`${date}T00:00:00`).getDay();
+}
+
+function getStationTime(residence, station, meal, date) {
+    const hours = RESIDENCE_HOURS[residence]?.stationHours;
+    if (!hours) return null;
+
+    const dayIdx = getDayIndexForDate(date);
+
+    const normalized = station.trim();
+
+    // Check exact station key
+    if (hours[normalized]) {
+        return hours[normalized][dayIdx] || null;
+    }
+
+    // Map ambiguous station names to concrete keys
+    const map = {
+        'Pan Station': meal === 'Dinner' ? 'Pan Station PM' : 'Pan Station AM',
+        'Pan Station AM': 'Pan Station AM',
+        'Pan Station PM': 'Pan Station PM',
+        'Foodie Finds': 'Foodie Finds',
+        'Breakfast Entree': 'Breakfast',
+        'Lunch Entree': 'Lunch',
+        'Dinner Entree': 'Dinner',
+        'Grill': hours['Grill'] ? 'Grill' : meal === 'Dinner' ? 'Grill PM' : 'Grill AM',
+        'Grill Station': meal === 'Dinner' ? 'Grill Station PM' : 'Grill Station AM',
+        'Grill Station PM': 'Grill Station PM',
+        'Grill Station AM': 'Grill Station AM',
+        'Salad Bar': 'Salad / Deli',
+        'Deli Bar': 'Salad / Deli',
+        'Coffee and Drinks': 'Coffee & Drinks',
+        'Coffee & Drinks': 'Coffee & Drinks',
+        'Soup': 'Soup',
+        'Pizza and Bake Station': 'Pizza',
+        'Dessert': 'Dessert'
+    };
+
+    const candidate = map[normalized] || Object.keys(map).find(k => normalized.toLowerCase().includes(k.toLowerCase()));
+    const key = candidate ? map[candidate] : null;
+    if (key && hours[key]) {
+        return hours[key][dayIdx] || null;
+    }
+
+    // fallback to meal-level general meal time
+    if (['Breakfast', 'Lunch', 'Dinner'].includes(meal) && hours[meal]) {
+        return hours[meal][dayIdx] || null;
+    }
+
+    return null;
+}
+
+function getCurrentMealTime() {
+    const residenceHours = RESIDENCE_HOURS[currentResidence];
+    if (!residenceHours) return null;
+    const dayIdx = getDayIndexForDate(currentDate);
+    const candidate = residenceHours.stationHours?.[currentMeal];
+    if (candidate) {
+        return candidate[dayIdx] || null;
+    }
+    return residenceHours.general?.[new Date(`${currentDate}T00:00:00`).toLocaleDateString('en-US', { weekday: 'long' })] || null;
+}
+
+function setMealTimeInfo() {
+    const info = document.getElementById('mealTimeInfo');
+    if (!info) return;
+
+    const mealTime = getCurrentMealTime();
+    const hasTime = mealTime && mealTime.toLowerCase() !== 'closed';
+
+    info.innerHTML = `Current meal: <strong>${currentMeal}</strong>${hasTime ? `<span>${mealTime}</span>` : '<span>closed or not available</span>'}`;
+}
+
 // Initialize page and fetch data
 document.addEventListener("DOMContentLoaded", () => {
     console.log("✅ DOMContentLoaded fired");
@@ -717,8 +791,11 @@ function renderMenu() {
         console.log("❌ No menu available for meal:", currentMeal);
         document.getElementById("featuredDishes").innerHTML = "<p class='empty-state'>No menu available for this meal.</p>";
         document.getElementById("allStations").innerHTML = "";
+        setMealTimeInfo();
         return;
     }
+
+    setMealTimeInfo();
 
     console.log("✅ mealData has stations:", Object.keys(mealData));
 
@@ -899,10 +976,16 @@ function renderStations(mealData) {
         const items = mealData[stationName];
         console.log(`  📍 Rendering station: "${stationName}" with ${items.length} items`);
 
+        const stationTime = getStationTime(currentResidence, stationName, currentMeal, currentDate) || 'Closed';
+        const today = getTodayString();
+        const isToday = currentDate === today;
+        const isClosed = isToday && stationTime.toLowerCase() === 'closed';
+
         const itemsHtml = items.map((item, idx) => `
             <div class="item ${idx >= 4 ? 'hidden-item' : ''}" tabindex="0">
                 <div class="item-name">${item.name}</div>
                 ${item.uom ? `<div class="item-uom">${item.uom}</div>` : ""}
+                <div class="item-time">${stationTime}</div>
                 ${hasNutritionData(item) ? `<span class="nutrition-badge">📊 ${item.nutrition[0]} cal</span>` : ""}
                 ${hasNutritionData(item) ? `<div class="nutrition-panel">${renderNutrition(item)}</div>` : ""}
             </div>
@@ -911,8 +994,8 @@ function renderStations(mealData) {
         const showMoreBtn = items.length > 4 ? `<button class="expand-btn" data-station="${stationName}">Show more (${items.length - 4})</button>` : '';
 
         html += `
-            <div class="station-card" data-station="${stationName}">
-                <div class="station-header">${stationName}</div>
+            <div class="station-card ${isClosed ? 'closed-station' : ''}" data-station="${stationName}">
+                <div class="station-header">${stationName} <span class="station-time">${stationTime}</span></div>
                 <div class="station-items">
                     ${itemsHtml}
                 </div>
