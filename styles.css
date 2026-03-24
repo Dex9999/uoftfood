@@ -377,6 +377,63 @@ header h1 {
     flex-wrap: wrap;
 }
 
+.hours-panel {
+    background: white;
+    border: 1px solid #e9ecef;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.08);
+    padding: 18px;
+    margin-top: 16px;
+}
+
+.hours-panel h3 {
+    font-size: 1.1em;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+.hours-panel .hours-subtitle {
+    color: #6b7280;
+    font-size: 0.9em;
+    margin-bottom: 12px;
+    display: block;
+}
+
+.hours-table,
+.station-hours-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.8em;
+    margin-top: 10px;
+}
+
+.hours-table th,
+.hours-table td,
+.station-hours-table th,
+.station-hours-table td {
+    border: 1px solid #dee2e6;
+    padding: 6px 8px;
+    text-align: center;
+}
+
+.hours-table th,
+.station-hours-table th {
+    background: #f1f5ff;
+    color: #334155;
+    font-weight: 700;
+}
+
+.station-hours-table th:first-child,
+.hours-table th:first-child {
+    text-align: left;
+}
+
+@media (max-width: 768px) {
+    .hours-table,
+    .station-hours-table {
+        font-size: 0.75em;
+    }
+}
 .residence-link {
     display: inline-block;
     padding: 8px 12px;

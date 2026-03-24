@@ -25,6 +25,125 @@ const RESIDENCE_SLUGS = {
     robarts: 'Robarts Cafeteria'
 };
 
+// Operating hours by residence
+const RESIDENCE_HOURS = {
+    'Oak House Dining Hall': {
+        placeName: 'Oak House',
+        general: {
+            Sunday: '8:00 AM – 8:00 PM',
+            Monday: '7:00 AM – 9:00 PM',
+            Tuesday: '7:00 AM – 9:00 PM',
+            Wednesday: '7:00 AM – 9:00 PM',
+            Thursday: '7:00 AM – 9:00 PM',
+            Friday: '7:00 AM – 8:00 PM',
+            Saturday: '8:00 AM – 8:00 PM'
+        },
+        stationHours: {
+            'Breakfast': ['8am-10:30am', '7am-10:30am', '7am-10:30am', '7am-10:30am', '7am-10:30am', '7am-10:30am', '8am-10:30am'],
+            'Lunch': ['11:30am-2pm', '11:30am-2pm', '11:30am-2pm', '11:30am-2pm', '11:30am-2pm', '11:30am-2pm', '11:30am-2pm'],
+            'Dinner': ['5pm-8pm', '5pm-9pm', '5pm-9pm', '5pm-9pm', '5pm-9pm', '5pm-9pm', '5pm-8pm'],
+            'Entrée AM': ['Closed', '11:30am-2pm', '11:30am-2pm', '11:30am-2pm', '11:30am-2pm', '11:30am-2pm', 'Closed'],
+            'Entrée PM': ['5pm-8pm', '5pm-9pm', '5pm-9pm', '5pm-9pm', '5pm-9pm', '5pm-9pm', '5pm-8pm'],
+            'Brunch': ['8am-2pm', 'Closed', 'Closed', 'Closed', 'Closed', 'Closed', '8am-2pm'],
+            'Salad / Deli': ['8am-8pm', '7am-9pm', '7am-9pm', '7am-9pm', '7am-9pm', '7am-8pm', '8am-8pm'],
+            'Pizza': ['11:30am-8pm', '11:30am-9pm', '11:30am-9pm', '11:30am-9pm', '11:30am-9pm', '11:30am-8pm', '11:30am-8pm'],
+            'Soup': ['11:30am-8pm', '11:30am-9pm', '11:30am-9pm', '11:30am-9pm', '11:30am-9pm', '11:30am-8pm', '11:30am-8pm'],
+            'Foodie Finds': ['Closed', '5pm-8:30pm', '5pm-8:30pm', '5pm-8:30pm', '5pm-8:30pm', '5pm-7:30pm', 'Closed'],
+            'Pan Station AM': ['Closed', 'Closed', 'Closed', 'Closed', 'Closed', 'Closed', 'Closed'],
+            'Pan Station PM': ['Closed', '5pm-8pm', '5pm-8pm', '5pm-8pm', '5pm-8pm', 'Closed', 'Closed'],
+            'Grill Station AM': ['Closed', '11:30am-2pm', '11:30am-2pm', '11:30am-2pm', '11:30am-2pm', '11:30am-2pm', 'Closed'],
+            'Grill Station PM': ['5pm-8pm', '5pm-9pm', '5pm-9pm', '5pm-9pm', '5pm-9pm', '5pm-9pm', '5pm-8pm'],
+            'Coffee & Drinks': ['8am-8pm', '7am-9pm', '7am-9pm', '7am-9pm', '7am-9pm', '7am-9pm', '8am-8pm'],
+            'Dessert': ['11:30am-8pm', '11:30am-9pm', '11:30am-9pm', '11:30am-9pm', '11:30am-9pm', '11:30am-9pm', '11:30am-8pm']
+        }
+    },
+    'CampusOne Dining Hall': {
+        placeName: 'CampusOne',
+        general: {
+            Sunday: '8:00 AM – 8:00 PM',
+            Monday: '7:00 AM – 9:00 PM',
+            Tuesday: '7:00 AM – 9:00 PM',
+            Wednesday: '7:00 AM – 9:00 PM',
+            Thursday: '7:00 AM – 9:00 PM',
+            Friday: '7:00 AM – 8:00 PM',
+            Saturday: '8:00 AM – 8:00 PM'
+        },
+        stationHours: {
+            'Breakfast': ['8am-10:30am', '7am-10:30am', '7am-10:30am', '7am-10:30am', '7am-10:30am', '7am-10:30am', '8am-10:30am'],
+            'Lunch': ['11:30am-2pm', '11:30am-2pm', '11:30am-2pm', '11:30am-2pm', '11:30am-2pm', '11:30am-2pm', '11:30am-2pm'],
+            'Dinner': ['5pm-8pm', '5pm-9pm', '5pm-9pm', '5pm-9pm', '5pm-9pm', '5pm-9pm', '5pm-8pm'],
+            'Entrée AM': ['11:30am-2pm', '11:30am-2pm', '11:30am-2pm', '11:30am-2pm', '11:30am-2pm', '11:30am-2pm', '11:30am-2pm'],
+            'Entrée PM': ['5pm-8pm', '5pm-9pm', '5pm-9pm', '5pm-9pm', '5pm-9pm', '5pm-9pm', '5pm-8pm'],
+            'Salad / Deli': ['8am-8pm', '7am-9pm', '7am-9pm', '7am-9pm', '7am-9pm', '7am-8pm', '8am-8pm'],
+            'Pizza': ['2pm-8pm', '11:30am-9pm', '11:30am-9pm', '11:30am-9pm', '11:30am-9pm', '11:30am-8pm', '2pm-8pm'],
+            'Soup': ['11:30am-8pm', '11:30am-9pm', '11:30am-9pm', '11:30am-9pm', '11:30am-9pm', '11:30am-8pm', '11:30am-8pm'],
+            'Foodie Finds': ['Closed', '12pm-7:30pm', '12pm-7:30pm', '12pm-7:30pm', '12pm-7:30pm', '12pm-7:30pm', 'Closed'],
+            'Pan Station AM': ['Closed', '11:30am-2pm', '11:30am-2pm', '11:30am-2pm', '11:30am-2pm', '11:30am-2pm', 'Closed'],
+            'Pan Station PM': ['Closed', '5pm-8pm', '5pm-8pm', '5pm-8pm', '5pm-8pm', 'Closed', 'Closed'],
+            'Grill': ['12pm-8pm', '11:30am-9pm', '11:30am-9pm', '11:30am-9pm', '11:30am-9pm', '11:30am-8pm', '12pm-8pm'],
+            'Coffee & Drinks': ['8am-8pm', '7am-9pm', '7am-9pm', '7am-9pm', '7am-9pm', '7am-9pm', '8am-8pm'],
+            'Dessert': ['11:30am-8pm', '11:30am-9pm', '11:30am-9pm', '11:30am-9pm', '11:30am-9pm', '11:30am-9pm', '11:30am-8pm']
+        }
+    },
+    'Chestnut Residence': {
+        placeName: 'Chestnut',
+        general: {
+            Sunday: '8:00 AM – 10:00 PM',
+            Monday: '7:00 AM – 10:00 PM',
+            Tuesday: '7:00 AM – 10:00 PM',
+            Wednesday: '7:00 AM – 10:00 PM',
+            Thursday: '7:00 AM – 10:00 PM',
+            Friday: '7:00 AM – 9:00 PM',
+            Saturday: '8:00 AM – 9:00 PM'
+        },
+        stationHours: {
+            'Breakfast': ['8am-10:30am', '7am-10:30am', '7am-10:30am', '7am-10:30am', '7am-10:30am', '7am-10:30am', '8am-10:30am'],
+            'Lunch': ['11:30am-2pm', '11:30am-2pm', '11:30am-2pm', '11:30am-2pm', '11:30am-2pm', '11:30am-2pm', '11:30am-2pm'],
+            'Dinner': ['5pm-10pm', '5pm-10pm', '5pm-10pm', '5pm-10pm', '5pm-10pm', '5pm-9pm', '5pm-9pm'],
+            'Entrée AM': ['11:30am-2pm', '11:30am-2pm', '11:30am-2pm', '11:30am-2pm', '11:30am-2pm', '11:30am-2pm', '11:30am-2pm'],
+            'Entrée PM': ['5pm-9pm', '5pm-9pm', '5pm-9pm', '5pm-9pm', '5pm-9pm', '5pm-8pm', '5pm-8pm'],
+            'Salad / Deli': ['8am-10pm', '7am-10pm', '7am-10pm', '7am-10pm', '7am-10pm', '7am-9pm', '8am-9pm'],
+            'Pizza': ['2pm-10pm', '2pm-10pm', '2pm-10pm', '2pm-10pm', '2pm-10pm', '2pm-9pm', '2pm-9pm'],
+            'Soup': ['11:30am-10pm', '11:30am-10pm', '11:30am-10pm', '11:30am-10pm', '11:30am-10pm', '11:30am-9pm', '11:30am-9pm'],
+            'Foodie Finds': ['Closed', '5pm-8pm', '5pm-8pm', '5pm-8pm', '5pm-8pm', 'Closed', 'Closed'],
+            'Pan Station AM': ['11am-2pm', '11:30am-2pm', '11:30am-2pm', '11:30am-2pm', '11:30am-2pm', '11:30am-2pm', 'Closed'],
+            'Pan Station PM': ['Closed', '5pm-8pm', '5pm-8pm', '5pm-8pm', '5pm-8pm', '5pm-8pm', 'Closed'],
+            'Grill AM': ['Closed', '11:30am-2pm', '11:30am-2pm', '11:30am-2pm', '11:30am-2pm', '11:30am-2pm', 'Closed'],
+            'Grill PM': ['2pm-10pm', '5pm-10pm', '5pm-10pm', '5pm-10pm', '5pm-10pm', '5pm-10pm', '2pm-10pm'],
+            'Coffee & Drinks': ['8am-10pm', '7am-10pm', '7am-10pm', '7am-10pm', '7am-10pm', '7am-9pm', '8am-9pm'],
+            'Dessert': ['11:30am-10pm', '11:30am-10pm', '11:30am-10pm', '11:30am-10pm', '11:30am-10pm', '11:30am-9pm', '11:30am-9pm']
+        }
+    },
+    'New College Dining Hall': {
+        placeName: 'New College',
+        general: {
+            Sunday: '8:00 AM – 10:00 PM',
+            Monday: '7:00 AM – 10:00 PM',
+            Tuesday: '7:00 AM – 10:00 PM',
+            Wednesday: '7:00 AM – 10:00 PM',
+            Thursday: '7:00 AM – 10:00 PM',
+            Friday: '7:00 AM – 9:00 PM',
+            Saturday: '8:00 AM – 9:00 PM'
+        },
+        stationHours: {
+            'Breakfast': ['8am-11:30am', '7am-10:30am', '7am-10:30am', '7am-10:30am', '7am-10:30am', '7am-10:30am', '8am-11:30am'],
+            'Lunch': ['11:30am-2pm', '11:30am-2pm', '11:30am-2pm', '11:30am-2pm', '11:30am-2pm', '11:30am-2pm', '11:30am-2pm'],
+            'Dinner': ['5pm-9pm', '5pm-10pm', '5pm-10pm', '5pm-10pm', '5pm-10pm', '5pm-10pm', '5pm-9pm'],
+            'Entrée AM': ['11:30am-2pm', '11am-2pm', '11am-2pm', '11am-2pm', '11am-2pm', '11am-2pm', '11:30am-2pm'],
+            'Entrée PM': ['5pm-9:30pm', '5pm-9:30pm', '5pm-9:30pm', '5pm-9:30pm', '5pm-9:30pm', '5pm-8:30pm', '5pm-8:30pm'],
+            'Salad / Deli': ['8am-9:30pm', '7am-9:30pm', '7am-9:30pm', '7am-9:30pm', '7am-9:30pm', '7am-8:30pm', '8am-8:30pm'],
+            'Pizza': ['2pm-10pm', '11am-10pm', '11am-10pm', '11am-10pm', '11am-10pm', '11am-9pm', '2pm-9pm'],
+            'Soup': ['11:30am-9:30pm', '11am-9:30pm', '11am-9:30pm', '11am-9:30pm', '11am-9:30pm', '11am-9:30pm', '11:30am-8:30pm'],
+            'Foodie Finds': ['Closed', '12pm-8pm', '12pm-8pm', '12pm-8pm', '12pm-8pm', '12pm-8pm', 'Closed'],
+            'Pan Station AM': ['11:30am-2pm', '11am-2pm', '11am-2pm', '11am-2pm', '11am-2pm', '11am-2pm', 'Closed'],
+            'Pan Station PM': ['5pm-8:30pm', '5pm-8:30pm', '5pm-8:30pm', '5pm-8:30pm', '5pm-8:30pm', 'Closed', 'Closed'],
+            'Grill': ['11:30am-10pm', '11am-10pm', '11am-10pm', '11am-10pm', '11am-10pm', '11am-9pm', '11:30am-9pm'],
+            'Coffee & Drinks': ['8am-10pm', '7am-10pm', '7am-10pm', '7am-10pm', '7am-10pm', '7am-9pm', '8am-9pm'],
+            'Dessert': ['11am-10pm', '11am-10pm', '11am-10pm', '11am-10pm', '11am-10pm', '11am-10pm', '11am-9pm']
+        }
+    }
+};
+
 // Residences with non-standard meal structures
 const SPECIAL_RESIDENCES = {
     'Robarts Cafeteria': 'Foodie Finds featuring Taste of the Danforth'
@@ -432,6 +551,50 @@ function getNextMealTime() {
     return "Dinner";                   // After 5 PM = Dinner
 }
 
+// Render residence/station operational hours info panel
+function renderResidenceHours() {
+    const container = document.getElementById('hoursContainer');
+    if (!container) return;
+
+    const residenceHours = RESIDENCE_HOURS[currentResidence];
+    if (!residenceHours) {
+        container.innerHTML = `<h3>Hours</h3><p class="hours-subtitle">No operating hours available for ${currentResidence}.</p>`;
+        return;
+    }
+
+    const DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+    const generalRow = DAYS.map(day => `<td>${residenceHours.general[day] || '—'}</td>`).join('');
+
+    const stationRows = Object.entries(residenceHours.stationHours).map(([station, values]) => {
+        const cells = DAYS.map((day, i) => `<td>${values[i] || 'Closed'}</td>`).join('');
+        return `<tr><th>${station}</th>${cells}</tr>`;
+    }).join('');
+
+    container.innerHTML = `
+        <h3>Operating Hours for ${residenceHours.placeName}</h3>
+        <span class="hours-subtitle">General building hours and station-level hours (Sunday→Saturday)</span>
+        <table class="hours-table">
+            <thead>
+                <tr><th>General</th>${DAYS.map(d => `<th>${d.slice(0, 3)}</th>`).join('')}</tr>
+            </thead>
+            <tbody>
+                <tr><th>Open</th>${generalRow}</tr>
+            </tbody>
+        </table>
+        <div style="margin-top:12px; overflow-x:auto">
+            <table class="station-hours-table">
+                <thead>
+                    <tr><th>Station</th>${DAYS.map(d => `<th>${d.slice(0, 3)}</th>`).join('')}</tr>
+                </thead>
+                <tbody>
+                    ${stationRows}
+                </tbody>
+            </table>
+        </div>
+    `;
+}
+
 // Initialize page and fetch data
 document.addEventListener("DOMContentLoaded", () => {
     console.log("✅ DOMContentLoaded fired");
@@ -619,6 +782,7 @@ function renderMenu() {
     console.log("🌟 Featured dishes:", featured);
     renderFeaturedDishes(featured);
     renderStations(mealData);
+    renderResidenceHours();
     console.log("✅ renderMenu() completed");
 }
 // Get all items across all stations
